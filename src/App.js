@@ -9,11 +9,6 @@ import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import 'tachyons';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
-
-const app = new Clarifai.App({
-    apiKey: 'a3fb29521d3b4970ad5b499285a58934'
-  });
 
 const ptops = {
   particles: {
@@ -27,25 +22,25 @@ const ptops = {
   }
 };
       
-              
-class mainApp extends Component {
-  constructor() {
-    super();
-    this.state = {
-      inputurl:'',
+const initialState = {
+  inputurl:'',
       imageUrl:'',
       box:{},
       route: 'signin',
-      isSignedIn: '',
+      isSignedIn: false,
       user:{
         id:'',
         name:'',
         email:'',
         entries:0,
         joined: ''
-      }
-    };
-  }
+      } 
+}       
+class mainApp extends Component {
+  constructor() {
+    super();
+    this.state = initialState;
+    }
 
   updateUser =(data) => {
     this.setState({user:{
@@ -54,7 +49,7 @@ class mainApp extends Component {
         email:data.email,
         entries:data.entries,
         joined: data.joined
-     }})
+    }})
   }
 
   conponentDidMOunt() {
@@ -88,18 +83,23 @@ class mainApp extends Component {
     this.setState({route:route});
 
     if (route === 'home') {
-      this.setState({isSignedIn:true})
-    }else{
-      this.setState({isSignedIn:false})
+      this.setState({isSignedIn: true})
+    }else if (route === 'signin') {
+      this.setState(initialState)
     }
   }
 
   onSubmit = () => {
     this.setState ({imageUrl:this.state.inputurl})
-    app.models.predict(
-      Clarifai.FACE_DETECT_MODEL,
-      this.state.inputurl)
-      .then(response => {
+      fetch('http://localhost:3000/imageurl', {
+        method:'post',
+        headers:{'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          inputurl:this.state.inputurl
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
         fetch('http://localhost:3000/image', {
         method:'put',
         headers:{'Content-Type': 'application/json'},
