@@ -16,10 +16,8 @@ app.use(bodyParser.json());
 const db = knex({
   client: 'pg',
   connection: {
-    host : 'postgresql-animate-01520',
-    user : 'postgres',
-    password : '',
-    database : 'face'
+    host : 'process.env.DATABASE_URL',
+    SSL:true
   }
 });
 
