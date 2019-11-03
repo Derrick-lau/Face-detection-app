@@ -53,7 +53,7 @@ class mainApp extends Component {
   }
 
   conponentDidMOunt() {
-    fetch('https://obscure-refuge-14640.herokuapp.com/')
+    fetch('https://gentle-ocean-64831.herokuapp.com/')
       .then(response => response.json())
       .then(data => console.log(data))
   }
@@ -91,7 +91,7 @@ class mainApp extends Component {
 
   onSubmit = () => {
     this.setState ({imageUrl:this.state.inputurl})
-      fetch('https://obscure-refuge-14640.herokuapp.com/imageurl', {
+      fetch('https://gentle-ocean-64831.herokuapp.com/imageurl', {
         method:'post',
         headers:{'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -100,7 +100,7 @@ class mainApp extends Component {
     })
     .then(response => response.json())
     .then(response => {
-        fetch('https://obscure-refuge-14640.herokuapp.com/image', {
+        fetch('https://gentle-ocean-64831.herokuapp.com/image', {
         method:'put',
         headers:{'Content-Type': 'application/json'},
         body: JSON.stringify({
