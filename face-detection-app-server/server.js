@@ -16,14 +16,14 @@ app.use(bodyParser.json());
 const db = knex({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
+    host : 'postgresql-animate-01520',
     user : 'postgres',
     password : '',
     database : 'face'
   }
 });
 
-app.get('/', (req, res)=> {return res.send(db.users)});
+app.get('/', (req, res)=> {return res.send("db.users")});
 app.post('/signin', (req,res) => { signin.handleSignin(req, res, db, bcrypt) });
 app.post('/register', (req,res) => { register.handleRegister(req, res, db, bcrypt) });
 app.get('/profile/:id', (req,res) => { profile.handleProfile(req, db, res) });
