@@ -13,10 +13,10 @@ import Particles from 'react-particles-js';
 const ptops = {
   particles: {
     number: {
-      value:300,
+      value:100,
       density:{
         enable:true,
-        value_area:1000   
+        value_area:300   
       }
     }
   }
