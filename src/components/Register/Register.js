@@ -22,7 +22,7 @@ class Register extends React.Component {
   }
 
    onSubmitSignIn = () => {
-    fetch('https://gentle-ocean-64831.herokuapp.com/register', {
+    fetch('http://localhost:3000/register', {
       method:'post',
       headers:{'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -33,12 +33,11 @@ class Register extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        if (data.id){
+        if (data.id)
           this.props.updateUser(data);
           this.props.onRouteChange('home');
-        }
-      })
-    }
+        })
+   }
 
   render(){
     return(

@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import './App.css';
 import TopBar from './components/TopBar/TopBar';
 import Logo from './components/Logo/Logo';
-import{ ImageLinkInput} from './components/ImageLinkInput/ImageLinkInput';
+import{ImageLinkInput} from './components/ImageLinkInput/ImageLinkInput';
 import FaceDetectionimg from './components/FaceDetection/FaceDetection';
 import Rank from './components/Rank/Rank';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import 'tachyons';
 import Particles from 'react-particles-js';
+import Profile from './components/Profile/Profile';
+import Modal from './components/Modal/Modal';
 
 const ptops = {
   particles: {
@@ -27,13 +29,16 @@ const initialState = {
       imageUrl:'',
       box:{},
       route: 'signin',
+      isProfileOpen: false,
       isSignedIn: false,
       user:{
         id:'',
         name:'',
         email:'',
         entries:0,
-        joined: ''
+        joined: '',
+        age: 0,
+        pet: ''
       } 
 }       
 class mainApp extends Component {
@@ -43,19 +48,46 @@ class mainApp extends Component {
     }
 
   updateUser =(data) => {
-    this.setState({user:{
-        id:data.id,
-        name:data.name,
-        email:data.email,
-        entries:data.entries,
-        joined: data.joined
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
     }})
   }
 
-  conponentDidMOunt() {
-    fetch('https://gentle-ocean-64831.herokuapp.com/')
-      .then(response => response.json())
-      .then(data => console.log(data))
+  componentDidMount() {
+    const token = window.sessionStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:3000/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.id) {
+            fetch(`http://localhost:3000/profile/${data.id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+              }
+            })
+            .then(response => response.json())
+            .then(user => {
+              if (user && user.email) {
+                this.updateUser(user)
+                this.onRouteChange('home');
+              }
+            })
+          }
+        })
+        .catch(console.log)
+    }
   }
 
   faceLocation = (data) => {
@@ -90,43 +122,68 @@ class mainApp extends Component {
   }
 
   onSubmit = () => {
-    this.setState ({imageUrl:this.state.inputurl})
-      fetch('https://gentle-ocean-64831.herokuapp.com/imageurl', {
-        method:'post',
-        headers:{'Content-Type': 'application/json'},
+    this.setState({imageUrl: this.state.input});
+      fetch('http://localhost:3000/imageurl', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': window.sessionStorage.getItem('token')
+        },
         body: JSON.stringify({
-          inputurl:this.state.inputurl
-      })
-    })
-    .then(response => response.json())
-    .then(response => {
-        fetch('https://gentle-ocean-64831.herokuapp.com/image', {
-        method:'put',
-        headers:{'Content-Type': 'application/json'},
-        body: JSON.stringify({
-        id: this.state.user.id
-      })
-    })
-        .then(response => response.json())
-        .then(data => {
-          this.setState(Object.assign(this.state.user, {entries:data}))
+          input: this.state.input
         })
+      })
+      .then(response => response.json())
+      .then(response => {
+        if (response) {
+          fetch('http://localhost:3000/image', {
+            method: 'put',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': window.sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+          })
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, { entries: count}))
+            })
+            .catch(console.log)
 
+        }
         this.displayFaceBox(this.faceLocation(response))
       })
       .catch(err => console.log(err));
   }
 
+  toggleModal = () => {
+    this.setState(state => ({
+      ...state,
+      isProfileOpen: !state.isProfileOpen,
+    }));
+  }
   render () {
     return (
-      <div className="WholeApp">
+      <>
           <Particles className='particles' params={ptops}/>
-          <TopBar isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange}/>
+          <TopBar isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange} toggleModal={this.toggleModal}/>
+          {
+            this.state.isProfileOpen &&
+            <Modal>
+              <Profile isProfileOpen={this.state.isProfileOpen} toggleModal={this.toggleModal} user={this.state.user} loadUser={this.updateUser} />
+            </Modal>
+          }
           { this.state.route ==='home'? 
               <div>
                   <Logo/>
-                  <Rank name={this.state.user.name} entries={this.state.user.entries}/>
-                  <ImageLinkInput onInputChange = {this.onInputChange} onSubmit = {this.onSubmit} />
+                  <Rank 
+                    name={this.state.user.name} 
+                    entries={this.state.user.entries}/>
+                  <ImageLinkInput 
+                    onInputChange = {this.onInputChange} 
+                    onSubmit = {this.onSubmit} />
                   <FaceDetectionimg box = {this.state.box} imageUrl = {this.state.imageUrl}/>
               </div>
           : 
@@ -137,7 +194,7 @@ class mainApp extends Component {
               <Register updateUser={this.updateUser} onRouteChange={this.onRouteChange} />
               )
           }
-      </div>
+      </>
     );
   }
 }

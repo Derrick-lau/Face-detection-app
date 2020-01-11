@@ -3,11 +3,11 @@ import './FaceDetection.css';
 
 const FaceDetectionimg = ({imageUrl, box}) => {
 	return (
-		<div className ='mt4 center'>
-			<div className = 'relative'>
-			<img id='inputimg' alt ='' src={imageUrl} width='500em' height='auto'/>
-			<div className='bounding-box' style={{top: box.topRow, right: box.rightcolum, bottom:box.bottomRow, left:box.leftcolum}}></div>
-			</div>
+		<div className='center ma'>
+		  <div className='absolute mt2'>
+			<img id='inputimage' alt='' src={imageUrl} width='500px' heigh='auto'/>y
+			
+		  </div>
 		</div>
 	);
 }

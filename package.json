@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
+    "bootstrap": "^4.4.1",
     "clarifai": "^2.9.1",
     "heroku": "^7.35.0",
     "react": "^16.10.2",
@@ -11,6 +11,7 @@
     "react-particles-js": "^2.7.0",
     "react-scripts": "^3.3.0",
     "react-tilt": "^0.1.4",
+    "reactstrap": "^8.2.0",
     "save": "^2.4.0",
     "tachyons": "^4.11.1"
   },

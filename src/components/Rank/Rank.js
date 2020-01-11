@@ -1,5 +1,4 @@
 import React from 'react';
-import { render } from 'react-dom';
 
 class Rank extends React.Component {
 	constructor(props){

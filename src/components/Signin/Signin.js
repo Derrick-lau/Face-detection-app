@@ -8,6 +8,7 @@ class Signin extends React.Component {
       signInPassword:''
     }
   }
+
   onEmailChange = (event) => {
     this.setState({signInEmail:event.target.value})
   }
@@ -16,26 +17,32 @@ class Signin extends React.Component {
     this.setState({signInPassword: event.target.value})
   }
 
+  saveAuthTokenInSessions = (token) => {
+    window.sessionStorage.setItem('token', token);
+  }
+
   onSubmitSignIn = () => {
     fetch('https://gentle-ocean-64831.herokuapp.com/signin', {
-      method:'post',
-      headers:{'Content-Type': 'application/json'},
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        email:this.state.signInEmail,
-        password:this.state.signInPassword
+        email: this.state.signInEmail,
+        password: this.state.signInPassword
       })
     })
       .then(response => response.json())
       .then(data => {
-        if(data.id){
-          this.props.updateUser(data);
+        if (data) {
           this.props.onRouteChange('home');
         }
       })
+      .catch(console.log)
   }
 
   render() {
+    
     return(
+
 	    <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
         <main className="pa4 black-80">
           <div className="measure">
