@@ -33,10 +33,12 @@ class Register extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        if (data.id)
+        if (data.id && data !=="incorrect form submission") {
           this.props.updateUser(data);
           this.props.onRouteChange('home');
-        })
+        } else {alert(data)}
+      })
+      .catch(console.log())
    }
 
   render(){

@@ -31,7 +31,7 @@ class ProfileIcon extends React.Component {
               </DropdownToggle>
               <DropdownMenu className='b--transparent ma10 shadow-5' style={{marginTop: '20px', backgroundColor: 'rgba(255, 255, 255, 0.5)', right:'100',position:"relative"}}>
                 <DropdownItem onClick={() => this.props.toggleModal()}>View Profile</DropdownItem>
-                <DropdownItem onClick={() => this.props.onRouteChange('signout')}>Sign Out</DropdownItem>
+                <DropdownItem onClick={() => this.props.onRouteChange('signin')}>Sign Out</DropdownItem>
               </DropdownMenu>
             </Dropdown>
       </div>

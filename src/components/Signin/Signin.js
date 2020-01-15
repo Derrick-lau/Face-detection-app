@@ -22,7 +22,7 @@ class Signin extends React.Component {
   }
 
   onSubmitSignIn = () => {
-    fetch('https://gentle-ocean-64831.herokuapp.com/signin', {
+    fetch('http://localhost:3000/signin', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -32,9 +32,9 @@ class Signin extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        if (data) {
+        if (data && data !== "incorrect form submission") {
           this.props.onRouteChange('home');
-        }
+        } else { alert(data)}
       })
       .catch(console.log)
   }
