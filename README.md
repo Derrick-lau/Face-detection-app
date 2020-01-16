@@ -22,3 +22,7 @@ The project was built with React and Express Server that allows users detect fac
 4.Run npm start
 
 5.You must add your own API key in the controllers/image.js file to connect to Clarifai API.
+
+# Roadmap
+- Dockerizing the back-end
+
