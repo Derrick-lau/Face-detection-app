@@ -25,4 +25,6 @@ The project was built with React and Express Server that allows users detect fac
 
 # Roadmap
 - Dockerizing the back-end
+- Circle CI
+
 
